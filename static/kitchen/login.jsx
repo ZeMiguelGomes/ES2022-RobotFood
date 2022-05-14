@@ -35,8 +35,11 @@ class MyPage extends React.Component {
         };
         fetch('/kitchen/', requestOptions)
             .then(response => response.json())
-            .catch(error => {this.setAlertMessage(error.message)})
-            .then(data => this.setState({ postId: data.id }));
+            .then(data => this.setState({ postId: data.id }))
+            .then(body => {
+              print(body)
+            })
+            .catch(error => this.setAlertMessage(error.message));
     }
 
     setAlertMessage(message) {
