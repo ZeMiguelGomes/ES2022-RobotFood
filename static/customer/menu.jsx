@@ -1,87 +1,72 @@
 class MyPage extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            email: "",
-            password: "",
-            alertMessage: "",
-        }
-        this.textreference = React.createRef();
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.setAlertMessage = this.setAlertMessage.bind(this);
-    }
+  constructor(props) {
+      super(props)
+      this.state = {
+          items: [],
+          alertMessage: "",
+      }
+      this.textreference = React.createRef();
+      this.setAlertMessage = this.setAlertMessage.bind(this);
+      
+  }
 
-    handleInputChange(event) {
-        event.preventDefault();
-        const target = event.target;
-        this.setState({
-            [target.name]: target.value
-        });
-    }
+  updateState() {
+    fetch('/customer/menu/')
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({
+            items: data
+          })
+        })
+        .catch(error => this.setAlertMessage(error.message));
+  }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        // Reset the alert to empty
-        this.setAlertMessage();
-        
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password
-            })
-        };
-        fetch('/kitchen/', requestOptions)
-            .then(response => response.json())
-            .catch(error => {this.setAlertMessage(error.message)})
-            .then(data => this.setState({ postId: data.id }));
-    }
+  componentDidMount() {
+    this.updateState();
+  }
 
-    setAlertMessage(message) {
-        this.setState({ alertMessage: message });
-    }
+  setAlertMessage(message) {
+      this.setState({ alertMessage: message });
+  }
 
-    render() {
-        return (
-            <div>
-              <Alert message={this.state.alertMessage} />
-              <form onSubmit={this.handleSubmit}>
-                <label>
-                  Email
-                  <input
-                    name="email"
-                    type="text"
-                    value={this.state.email}
-                    onChange={this.handleInputChange}
-                  />
-                </label>
-                <label>
-                  Password
-                  <input
-                    name="password"
-                    type="password"
-                    value={this.state.password}
-                    onChange={this.handleInputChange}
-                  />
-                </label>
-                <button type="submit">Log in</button>
-              </form>
-            </div>
-        );
-    }
+  render() {
+      return (
+          <div>
+            <Alert message={this.state.alertMessage} />
+            <table>
+              <tbody>
+                {!this.state.items || this.state.items.length <= 0 ? (
+                <tr>
+                  <td colSpan="6" align="center">
+                  <b>Ops, no food here yet</b>
+                  </td>
+                </tr>) : 
+                (
+                  this.state.items.map(item => (
+                    <tr colSpan="6" align="center" key={item.food_id}>
+                      <td>{item.name}</td>
+                      <td>{item.description}</td>
+                      <td>{item.calories}</td>
+                      <td>{item.price}</td>
+                    </tr>)
+                  )
+                )}
+              </tbody>
+            </table>
+        </div>
+      );
+  }
 
 }
 
 class Alert extends React.Component {
-    constructor(props) {
-      super(props);
-    }
-    render() {
-      if (!this.props.message) return "";
-      return <div id="alert">{this.props.message}</div>;
-    }
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    if (!this.props.message) return "";
+    return <div id="alert">{this.props.message}</div>;
+  }
 }
 
 ReactDOM.render(<MyPage/>, reacthere)
