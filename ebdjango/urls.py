@@ -15,16 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from backend import views
-from rest_framework import routers
- 
-# create a router object
-router = routers.DefaultRouter()
- 
-# register the router
-router.register(r'users',views.UtilizadorView, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('kitchen/', include('kitchen.urls')),
 ]
