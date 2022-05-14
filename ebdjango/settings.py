@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'projetoes-env.eba-cmhnb53q.us-east-1.elasticbeanstalk.com',
+    'ebdjango-env-1.eba-j8433mxt.us-east-1.elasticbeanstalk.com',
 ]
 
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'kitchen',
+    'customer',
     'rest_framework',
 ]
 
