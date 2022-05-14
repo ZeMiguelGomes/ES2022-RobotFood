@@ -34,9 +34,21 @@ class MyPage extends React.Component {
             })
         };
         fetch('/kitchen/', requestOptions)
-            .then(response => response.json())
-            .catch(error => {this.setAlertMessage(error.message)})
-            .then(data => this.setState({ postId: data.id }));
+            .then(response => {
+              response.json().then(data => ({
+                data: data,
+                status: response.status
+              })).then(res => {
+                  var Resposta = res.data;
+
+                  if (Resposta.logged) {
+                      window.location.replace("/kitchen/pendingOrders");
+                  }
+
+              });
+            })
+            
+            .catch(error => this.setAlertMessage(error.message));
     }
 
     setAlertMessage(message) {
