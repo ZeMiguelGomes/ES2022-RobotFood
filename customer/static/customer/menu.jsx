@@ -49,8 +49,10 @@ class MyPage extends React.Component {
                       <td>{item.calories}</td>
                       <td>{item.price}</td>
                     </tr>)
+                    
                   )
-                )}
+                  )
+                  }
               </tbody>
             </table>
         </div>
