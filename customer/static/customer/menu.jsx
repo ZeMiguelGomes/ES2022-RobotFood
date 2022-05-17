@@ -43,11 +43,11 @@ class MyPage extends React.Component {
                 </tr>) : 
                 (
                   this.state.items.map(item => (
-                    <tr colSpan="6" align="center" key={item.food_id}>
-                      <td>{item.name}</td>
-                      <td>{item.description}</td>
-                      <td>{item.calories}</td>
-                      <td>{item.price}</td>
+                    <tr colSpan="6" align="center" key={item.food_id.N}>
+                      <td>{item.name.S}</td>
+                      <td>{item.description.S}</td>
+                      <td>{item.calories.N}</td>
+                      <td>{item.price.N}</td>
                     </tr>)
                     
                   )
