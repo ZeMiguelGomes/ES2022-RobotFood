@@ -1,3 +1,10 @@
+//import React from 'react';
+//import ReactDOM from 'react-dom';
+//import {Container, Row,Table, Button } from 'reactstrap';
+//import 'bootstrap/dist/css/bootstrap.css';
+
+
+
 class MyPage extends React.Component {
   constructor(props) {
       super(props)
@@ -31,6 +38,7 @@ class MyPage extends React.Component {
 
   render() {
       return (
+<<<<<<< Updated upstream
           <div>
             <Alert message={this.state.alertMessage} />
             <table>
@@ -56,8 +64,44 @@ class MyPage extends React.Component {
               </tbody>
             </table>
         </div>
+=======
+            <Reactstrap.Container style={{ marginTop: "20px" }}>
+              <Alert message={this.state.alertMessage} />
+              <Reactstrap.Table dark>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Calories</th>
+                    <th>Price</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!this.state.items || this.state.items.length <= 0 ? (
+                  <tr>
+                    <td colSpan="6" align="center">
+                    <b>Ops, no food here yet</b>
+                    </td>
+                  </tr>) : 
+                  (
+                    this.state.items.map(item => (
+                      <tr colSpan="6" align="center" key={item.food_id}>
+                        <td>{item.name}</td>
+                        <td>{item.description}</td>
+                        <td>{item.calories}</td>
+                        <td>{item.price}</td>
+                      </tr>)
+                    )
+                  )}
+                </tbody>
+              </Reactstrap.Table>            
+          </Reactstrap.Container>
+>>>>>>> Stashed changes
       );
   }
+
+  
 
 }
 
@@ -71,4 +115,5 @@ class Alert extends React.Component {
   }
 }
 
-ReactDOM.render(<MyPage/>, reacthere)
+
+ReactDOM.render(<MyPage/>, document.getElementById('reacthere'))

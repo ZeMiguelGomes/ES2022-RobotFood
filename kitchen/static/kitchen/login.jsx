@@ -96,4 +96,4 @@ class Alert extends React.Component {
     }
 }
 
-ReactDOM.render(<MyPage/>, reacthere)
+ReactDOM.render(<MyPage/>, login)
