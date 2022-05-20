@@ -10,9 +10,12 @@ class MyPage extends React.Component {
       super(props)
       this.state = {
           items: [],
+          selectedCategory: "",
+          order: [],
           alertMessage: "",
       }
       this.textreference = React.createRef();
+      this.setCategory = this.setCategory.bind(this);
       this.setAlertMessage = this.setAlertMessage.bind(this);
       
   }
@@ -36,73 +39,67 @@ class MyPage extends React.Component {
       this.setState({ alertMessage: message });
   }
 
+  setCategory(category) {
+    this.setState({selectedCategory: category});
+  }
+
+  addItem(item) {
+    let array = this.state.order;
+    array.push(item.name)
+    this.setState({order: array});
+  }
+
   render() {
       return (
-<<<<<<< Updated upstream
-          <div>
-            <Alert message={this.state.alertMessage} />
-            <table>
+            <div>
+              <h3>Menu</h3>
+              <Reactstrap.ListGroup>
+                <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Appetizer")} action>Appetizers</Reactstrap.ListGroupItem>
+                <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Soup")} action>Soups</Reactstrap.ListGroupItem>
+                <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Main Course")} action>Main Courses</Reactstrap.ListGroupItem>
+                <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Drink")} action>Drinks</Reactstrap.ListGroupItem>
+                <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Dessert")} action>Desserts</Reactstrap.ListGroupItem>
+              </Reactstrap.ListGroup>
+              
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Calories</th>
+                    <th>€</th>
+                  </tr>
+                </thead>
+
               <tbody>
                 {!this.state.items || this.state.items.length <= 0 ? (
                 <tr>
                   <td colSpan="6" align="center">
-                  <b>Ops, no food here yet</b>
+                  <b>Oops, no food here yet</b>
                   </td>
                 </tr>) : 
                 (
                   this.state.items.map(item => (
-                    <tr colSpan="6" align="center" key={item.food_id.N}>
+                    item.category.S == this.state.selectedCategory ?
+                      <tr colSpan="6" align="center" key={item.food_id.N}>
                       <td>{item.name.S}</td>
                       <td>{item.description.S}</td>
                       <td>{item.calories.N}</td>
                       <td>{item.price.N}</td>
-                    </tr>)
+                      <Reactstrap.Button onClick={() => this.addItem(item)}>Add</Reactstrap.Button>
+                      </tr>
                     
+                    :
+                    null
                   )
                   )
-                  }
+                )
+              }
               </tbody>
             </table>
-        </div>
-=======
-            <Reactstrap.Container style={{ marginTop: "20px" }}>
-              <Alert message={this.state.alertMessage} />
-              <Reactstrap.Table dark>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Calories</th>
-                    <th>Price</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {!this.state.items || this.state.items.length <= 0 ? (
-                  <tr>
-                    <td colSpan="6" align="center">
-                    <b>Ops, no food here yet</b>
-                    </td>
-                  </tr>) : 
-                  (
-                    this.state.items.map(item => (
-                      <tr colSpan="6" align="center" key={item.food_id}>
-                        <td>{item.name}</td>
-                        <td>{item.description}</td>
-                        <td>{item.calories}</td>
-                        <td>{item.price}</td>
-                      </tr>)
-                    )
-                  )}
-                </tbody>
-              </Reactstrap.Table>            
-          </Reactstrap.Container>
->>>>>>> Stashed changes
+            </div>
       );
   }
-
-  
-
 }
 
 class Alert extends React.Component {
