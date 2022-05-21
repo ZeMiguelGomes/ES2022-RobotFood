@@ -8,7 +8,6 @@ from django.http import JsonResponse
 
 get_food_items = "arn:aws:states:us-east-1:936322414606:stateMachine:GetFoodItems"
 
-
 @api_view(['GET'])
 def getFoodItems(request):
     if request.method == 'GET':
@@ -22,3 +21,8 @@ def getFoodItems(request):
 def index(request):
     if request.method == 'GET':
         return render(request, 'customer/menu.html')
+
+@api_view(['GET'])
+def mainMenu(request):
+    if request.method == 'GET':
+        return render(request, 'customer/mainMenu.html')

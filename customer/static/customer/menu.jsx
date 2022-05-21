@@ -23,6 +23,7 @@ class MyPage extends React.Component {
 
   componentDidMount() {
     this.updateState();
+    console.log("updateState");
   }
 
   setAlertMessage(message) {
@@ -32,29 +33,40 @@ class MyPage extends React.Component {
   render() {
       return (
           <div>
-            <Alert message={this.state.alertMessage} />
-            <table>
-              <tbody>
-                {!this.state.items || this.state.items.length <= 0 ? (
-                <tr>
-                  <td colSpan="6" align="center">
-                  <b>Ops, no food here yet</b>
-                  </td>
-                </tr>) : 
-                (
-                  this.state.items.map(item => (
-                    <tr colSpan="6" align="center" key={item.food_id.N}>
-                      <td>{item.name.S}</td>
-                      <td>{item.description.S}</td>
-                      <td>{item.calories.N}</td>
-                      <td>{item.price.N}</td>
-                    </tr>)
-                    
-                  )
-                  )
-                  }
-              </tbody>
-            </table>
+            <Reactstrap.Container style={{ marginTop: "20px" }}>
+              <Alert message={this.state.alertMessage} />
+              <Reactstrap.Table dark>
+                <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Description</th>
+                      <th>Calories</th>
+                      <th>Price</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {!this.state.items || this.state.items.length <= 0 ? (
+                    <tr>
+                      <td colSpan="6" align="center">
+                      <b>Ops, no food here yet</b>
+                      </td>
+                    </tr>) : 
+                      (
+                      this.state.items.map(item => (
+                        <tr colSpan="6" align="center" key={item.food_id.N}>
+                          <td>{item.name.S}</td>
+                          <td>{item.description.S}</td>
+                          <td>{item.calories.N}</td>
+                          <td>{item.price.N}</td>
+                        </tr>)
+                        
+                      )
+                      )
+                      }
+                  </tbody>
+            </Reactstrap.Table>
+          </Reactstrap.Container>
         </div>
       );
   }

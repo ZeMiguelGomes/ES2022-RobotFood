@@ -1,16 +1,94 @@
+<<<<<<< Updated upstream
+=======
+
+import json
+import re
+>>>>>>> Stashed changes
 import boto3
 from rest_framework.decorators import api_view
 from django.shortcuts import render
 from django.http import JsonResponse
+<<<<<<< Updated upstream
 
 # Create your views here.
 
 @api_view(['GET','POST'])
 def index(request):
+=======
+from botocore.exceptions import ClientError
+from rest_framework.response import Response
+from rest_framework import status
+import jwt
+
+
+KEY = "b96ZhIxcBdxNPDn4WRzDueMMqyux3k7g"
+#Encrypt
+#pwd_context = CryptContext(
+#        schemes=["pbkdf2_sha256"],
+#        default="pbkdf2_sha256",
+#        pbkdf2_sha256__default_rounds=30000
+#)
+
+# Create your views here.
+
+@api_view(['GET', 'POST', 'PUT'])
+def loginStaff(request):
+   
+>>>>>>> Stashed changes
     if request.method == 'POST':
         # Logica de Verificacao de Log In
         print(request.data)
         return JsonResponse({"logged": True})
 
+    """ if request.method == 'GET':
+        if(len(request.data) == 0):
+            return render(request, 'kitchen/login.html')
+        return render(request, 'kitchen/insideLogin.html') """
+
     if request.method == 'GET':
+<<<<<<< Updated upstream
+=======
+        return render(request, 'kitchen/insideLogin.html')
+
+    if request.method == 'PUT':
+            dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+
+            try:
+                response = dynamodb.Table('kitchen_staff').get_item(
+                    Key={'staff_email': request.data['username']}
+                )
+            except ClientError as e:
+                print(e.response['Error']['Message'])
+
+            else:
+                
+                update = dynamodb.Table('kitchen_staff').update_item(                                       
+                        Key={'staff_email': request.data['username']},
+                        UpdateExpression="set authToken = :r, isLoggedIn = :s",
+                        ExpressionAttributeValues={
+                            ':r': '',
+                            ':s': 'False'
+                        },
+                        ReturnValues="ALL_NEW"
+                    )
+            return render(request, 'kitchen/login.html')
+
+
+
+get_ordersZe = 'arn:aws:states:us-east-1:067458896719:stateMachine:GetOrders'
+
+@api_view(['GET'])
+def getOrders(request):
+    if request.method == 'GET':
+        sf = boto3.client('stepfunctions', region_name='us-east-1')
+        res = sf.start_sync_execution(stateMachineArn=get_ordersZe)
+        data = json.loads(res["output"])
+        
+        return JsonResponse(data, safe=False)
+
+
+@api_view(['GET'])
+def index(request):
+    if request.method == 'GET':
+>>>>>>> Stashed changes
         return render(request, 'kitchen/login.html')
