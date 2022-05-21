@@ -18,6 +18,10 @@ class MyPage extends React.Component {
       }
       this.textreference = React.createRef();
       this.setCategory = this.setCategory.bind(this);
+      this.addItem = this.addItem.bind(this);
+      this.removeItem = this.removeItem.bind(this);
+      this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
       this.setAlertMessage = this.setAlertMessage.bind(this);
       
   }
@@ -49,8 +53,8 @@ class MyPage extends React.Component {
     let array = this.state.order;
     let name = item.name.S;
     let price = item.price.N;
-    let newItem = {name, price}
-    array.push(newItem)
+    let newItem = {name, price};
+    array.push(newItem);
     this.setState({order: array});
     console.log(this.state.order);
   }
@@ -70,10 +74,12 @@ class MyPage extends React.Component {
   handleInputChange(event) {
     event.preventDefault();
     const target = event.target;
+    let name = target.name;
+    let value = target.value;
     this.setState({
-        [target.name]: target.value
+        [name]: value
     });
-}
+  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -94,7 +100,7 @@ class MyPage extends React.Component {
           console.log(data)
         })
         ).catch(error => this.setAlertMessage(error.message));
-}
+  }
 
   render() {
     return (
@@ -111,31 +117,14 @@ class MyPage extends React.Component {
         {this.renderCategory()}
 
         <h3>Order</h3>
-        <table>
-          <tbody>
-            {!this.state.order || this.state.order.length <= 0 ? (
-              <tr>
-                <td colSpan="6" align="center">
-                <b>You haven't added any food items yet.</b>
-                </td>
-              </tr>) : 
-                (this.state.order.map(item => (
-                  <tr colSpan="6" align="center">
-                    <td>{item.name}</td>
-                    <td>{item.price}</td>
-                    <Reactstrap.Button onClick={() => this.removeItem(item)}>Remove</Reactstrap.Button>
-                  </tr>
-                  )
-                )
-              )
-            }
-          </tbody>
-        </table>
+        {this.renderOrder()}
 
         <form onSubmit={this.handleSubmit}>
           <label>
             Location tag:
-            <input type="number" name="locationTag" value={this.state.locationTag} onChange={this.handleInputChange}/>
+            <input type="number" min="0" name="locationTag" value={this.state.locationTag} onChange={(e) => {
+                this.handleInputChange(e);
+              }}/>
           </label>
           <input type="submit" value="Submit"/>
         </form>
@@ -174,6 +163,30 @@ class MyPage extends React.Component {
             )
           }
         </tbody>
+    </table>);
+  }
+
+  renderOrder() {
+    return(
+    <table>
+      <tbody>
+        {!this.state.order || this.state.order.length <= 0 ? (
+          <tr>
+            <td colSpan="6" align="center">
+            <b>You haven't added any food items yet.</b>
+            </td>
+          </tr>) : 
+            (this.state.order.map(item => (
+              <tr colSpan="6" align="center">
+                <td>{item.name}</td>
+                <td>{item.price}</td>
+                <Reactstrap.Button onClick={() => this.removeItem(item)}>Remove</Reactstrap.Button>
+              </tr>
+              )
+            )
+          )
+        }
+      </tbody>
     </table>);
   }
 }
