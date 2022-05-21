@@ -22,3 +22,19 @@ def getFoodItems(request):
 def index(request):
     if request.method == 'GET':
         return render(request, 'customer/menu.html')
+
+@api_view(['GET', 'POST'])
+def uploadPhoto(request):
+
+    if request.method == 'GET':
+        return render(request, 'customer/uploadphoto.html')
+
+    if request.method == 'POST':
+        data = request.data.dict()
+
+        s3 = boto3.resource('s3', region_name='us-east-1')
+
+        object = s3.Object('facetodetect', data['file'].name)
+        ret = object.put(Body=data['file'])
+
+        return JsonResponse(ret, safe=False)
