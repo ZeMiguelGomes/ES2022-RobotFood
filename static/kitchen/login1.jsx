@@ -13,16 +13,11 @@ class Login extends React.Component {
       validate: {
         emailState: '',
       },
-      canLoggin: true,
     };
-    //this.handleChange = this.handleChange.bind(this);
-    this.changeStateLogin = this.changeStateLogin.bind(this);
-    this.submitForm = this.submitForm.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+
   }
 
-  changeStateLogin(){
-    this.setState({canLoggin: false});
-  }
 
   handleChange = (event) => {
     const { target } = event;
@@ -54,7 +49,7 @@ class Login extends React.Component {
     console.log(`Email: ${this.state.email}`);
     console.log(`Pass: ${this.state.password}`);
 
-    var that = this;
+    var obj;
 
     fetch('/kitchen/login/', {
       // Adding method type
@@ -72,28 +67,18 @@ class Login extends React.Component {
     return response.json()
     .then(function(json){
 
-      if(json != null){
-        if(json['Attributes']['authToken'] != null){
-          //Go to new screen
-          canLoggin = 'True'
-          var staffProps = {
-            'email': json['Attributes']['staff_email'], 
-            'name' : json['Attributes']['name'],
-            'authToken' : json['Attributes']['authToken']
-          }
-          sessionStorage.setItem('email', JSON.stringify(staffProps));
-          console.log(JSON.stringify(staffProps));
-          window.location.replace('/kitchen/login/');
 
-        }else{
-          that.changeStateLogin();
-          canLoggin = 'False'
-        }
+      if(json['Attributes']['authToken'] != null || String(json['Attributes']['authToken']).length != 0){
+        //Go to new screen
+      
+        canLoggin = 'True'
+        window.location.replace('/kitchen/login/');
+
       }else{
-        that.changeStateLogin();
         canLoggin = 'False'
       }
-    
+      console.log(json);
+      console.log(json['Attributes']['authToken']);
     });
   })
   };
@@ -119,7 +104,7 @@ class Login extends React.Component {
               value={email}
               onChange={(e) => {
                 this.validateEmail(e);
-                //this.handleChange(e);
+                this.handleChange(e);
               }}
             />
             <Reactstrap.FormText>Your username is most likely your email.</Reactstrap.FormText>
@@ -132,11 +117,11 @@ class Login extends React.Component {
               id="examplePassword"
               placeholder="********"
               value={password}
-              //onChange={(e) => this.handleChange(e)}
+              onChange={(e) => this.handleChange(e)}
             />
           </Reactstrap.FormGroup>
           <Reactstrap.Button >Submit</Reactstrap.Button>
-          {this.state.canLoggin == false ?<Reactstrap.FormText> Oops something wrong happened!</Reactstrap.FormText>:null}
+          {canLoggin === 'False'?<Reactstrap.Label> Ups aconteceu um erro!</Reactstrap.Label>:null}
 
         </Reactstrap.Form>
       </div>

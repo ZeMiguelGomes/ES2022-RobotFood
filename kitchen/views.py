@@ -1,20 +1,9 @@
-<<<<<<< Updated upstream
-=======
-
 import json
 import re
->>>>>>> Stashed changes
 import boto3
 from rest_framework.decorators import api_view
 from django.shortcuts import render
 from django.http import JsonResponse
-<<<<<<< Updated upstream
-
-# Create your views here.
-
-@api_view(['GET','POST'])
-def index(request):
-=======
 from botocore.exceptions import ClientError
 from rest_framework.response import Response
 from rest_framework import status
@@ -34,11 +23,41 @@ KEY = "b96ZhIxcBdxNPDn4WRzDueMMqyux3k7g"
 @api_view(['GET', 'POST', 'PUT'])
 def loginStaff(request):
    
->>>>>>> Stashed changes
     if request.method == 'POST':
+        dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+
+        try:
+            response = dynamodb.Table('kitchen_staff').get_item(
+                Key={'staff_email': request.data['username']}
+            )
+        except ClientError as e:
+            print(e.response['Error']['Message'])
+
         # Logica de Verificacao de Log In
-        print(request.data)
-        return JsonResponse({"logged": True})
+        else:
+            #Check if the response has something
+            if 'Item' in response:
+                #The emails exists
+                if response['Item']['password'] == request.data['password']:
+                    #We need to authenticate
+                    token = jwt.encode(response['Item'], KEY)
+                    #Colocar o TOKEN na BD e update ao boolean
+                    update = dynamodb.Table('kitchen_staff').update_item(                                       
+                        Key={'staff_email': request.data['username']},
+                        UpdateExpression="set authToken = :r, isLoggedIn = :s",
+                        ExpressionAttributeValues={
+                            ':r': token,
+                            ':s': 'True'
+                        },
+                        ReturnValues="ALL_NEW"
+                    )
+                    print("Sucess")
+                    return JsonResponse(update, safe=False)
+                else:
+                    #Wrong password
+                    return JsonResponse(None, safe=False)
+            else:
+                return JsonResponse(None, safe=False)
 
     """ if request.method == 'GET':
         if(len(request.data) == 0):
@@ -46,8 +65,6 @@ def loginStaff(request):
         return render(request, 'kitchen/insideLogin.html') """
 
     if request.method == 'GET':
-<<<<<<< Updated upstream
-=======
         return render(request, 'kitchen/insideLogin.html')
 
     if request.method == 'PUT':
@@ -75,6 +92,9 @@ def loginStaff(request):
 
 
 
+
+
+
 get_ordersZe = 'arn:aws:states:us-east-1:067458896719:stateMachine:GetOrders'
 
 @api_view(['GET'])
@@ -87,8 +107,8 @@ def getOrders(request):
         return JsonResponse(data, safe=False)
 
 
+
 @api_view(['GET'])
 def index(request):
     if request.method == 'GET':
->>>>>>> Stashed changes
         return render(request, 'kitchen/login.html')

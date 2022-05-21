@@ -102,6 +102,7 @@ class Login extends React.Component {
 
   render() {
     const { email, password } = this.state;
+
     return (
       <div className="Login">
         <h2>Sign In</h2>

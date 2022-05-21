@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'projetoes-env.eba-cmhnb53q.us-east-1.elasticbeanstalk.com',
     'ebdjango-env-1.eba-j8433mxt.us-east-1.elasticbeanstalk.com',
+    'robotfood-env.eba-s6hmnkqn.us-east-1.elasticbeanstalk.com'
 ]
 
 
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'customer',
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +111,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 
 # Internationalization
