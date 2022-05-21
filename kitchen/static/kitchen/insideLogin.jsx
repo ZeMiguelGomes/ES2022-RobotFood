@@ -2,7 +2,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      canSeePage : true,
+      canSeePage : false,
       items: [],
     }
     this.handleSeingPage = this.handleSeingPage.bind(this);
@@ -10,15 +10,18 @@ class App extends React.Component {
   }
   
   handleSeingPage(){
-    this.setState({canSeePage : false})
+    this.setState({canSeePage : true})
   }
 
   verifyAuthToken(){
     const data = JSON.parse(sessionStorage.getItem('email'));
     if (data == null){
-      this.handleSeingPage();
       window.location.replace('/kitchen/');
     }
+    else{
+      this.handleSeingPage();
+    }
+    
   }
 
   updateState() {
@@ -41,9 +44,13 @@ class App extends React.Component {
 
   render(){
     const canSeePage = this.state.canSeePage;
+    console.log(canSeePage);
+    
     return(
       <div>
-        {canSeePage ? <KitchenPage/> : null}
+        {canSeePage ? 
+        <div>
+        <KitchenPage/> 
         <div className="insideLogin">
           <h1> Kitchen staff</h1>
           <div>
@@ -80,6 +87,8 @@ class App extends React.Component {
             </Reactstrap.Container>
           </div>
         </div>
+        </div>
+        : null}
     </div>
     );
   }

@@ -2,9 +2,6 @@
 //import ReactDOM from 'react-dom';
 //import {Container, Row,Table, Button } from 'reactstrap';
 //import 'bootstrap/dist/css/bootstrap.css';
-
-
-
 class MyPage extends React.Component {
   constructor(props) {
       super(props)
@@ -25,7 +22,6 @@ class MyPage extends React.Component {
       this.setAlertMessage = this.setAlertMessage.bind(this);
       
   }
-
   updateState() {
     fetch('/customer/menu/')
         .then(res => res.json())
