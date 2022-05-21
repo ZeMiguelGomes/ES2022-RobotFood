@@ -12,6 +12,8 @@ class MyPage extends React.Component {
           items: [],
           selectedCategory: "Appetizer",
           order: [],
+          locationTag: "",
+          price: "",
           alertMessage: "",
       }
       this.textreference = React.createRef();
@@ -65,6 +67,35 @@ class MyPage extends React.Component {
     console.log(this.state.order);
   }
 
+  handleInputChange(event) {
+    event.preventDefault();
+    const target = event.target;
+    this.setState({
+        [target.name]: target.value
+    });
+}
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // Reset the alert to empty
+    this.setAlertMessage();
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            order: this.state.order,
+        })
+    };
+    fetch('/customer/orderprice/', requestOptions)
+        .then(response => response.json()
+        .then(data => {
+          this.setState({ price: data.price });
+          console.log(data)
+        })
+        ).catch(error => this.setAlertMessage(error.message));
+}
+
   render() {
     return (
       <div>
@@ -77,37 +108,7 @@ class MyPage extends React.Component {
           <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Dessert")} action>Desserts</Reactstrap.ListGroupItem>
         </Reactstrap.ListGroup>
               
-        <table>
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Description</th>
-              <th>Calories</th>
-              <th>€</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!this.state.items || this.state.items.length <= 0 ? (
-              <tr>
-                <td colSpan="6" align="center">
-                <b>Oops, no food here yet</b>
-                </td>
-              </tr>) : 
-                (this.state.items.map(item => (
-                item.category.S == this.state.selectedCategory ?
-                  <tr colSpan="6" align="center" key={item.food_id.N}>
-                    <td>{item.name.S}</td>
-                    <td>{item.description.S}</td>
-                    <td>{item.calories.N}</td>
-                    <td>{item.price.N}</td>
-                    <Reactstrap.Button onClick={() => this.addItem(item)}>Add</Reactstrap.Button>
-                  </tr> :
-                    null)
-                  )
-                )
-              }
-            </tbody>
-        </table>
+        {this.renderCategory()}
 
         <h3>Order</h3>
         <table>
@@ -131,15 +132,49 @@ class MyPage extends React.Component {
           </tbody>
         </table>
 
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <label>
             Location tag:
-            <input type="number" name="locationTag" />
+            <input type="number" name="locationTag" value={this.state.locationTag} onChange={this.handleInputChange}/>
           </label>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit"/>
         </form>
       </div>
     );
+  }
+
+  renderCategory() {
+    return(<table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Description</th>
+          <th>Calories</th>
+          <th>€</th>
+        </tr>
+      </thead>
+      <tbody>
+        {!this.state.items || this.state.items.length <= 0 ? (
+          <tr>
+            <td colSpan="6" align="center">
+            <b>Oops, no food here yet</b>
+            </td>
+          </tr>) : 
+            (this.state.items.map(item => (
+            item.category.S == this.state.selectedCategory ?
+              <tr colSpan="6" align="center" key={item.food_id.N}>
+                <td>{item.name.S}</td>
+                <td>{item.description.S}</td>
+                <td>{item.calories.N}</td>
+                <td>{item.price.N}</td>
+                <Reactstrap.Button onClick={() => this.addItem(item)}>Add</Reactstrap.Button>
+              </tr> :
+                null)
+              )
+            )
+          }
+        </tbody>
+    </table>);
   }
 }
 
