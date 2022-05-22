@@ -7,12 +7,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 get_food_items = "arn:aws:states:us-east-1:936322414606:stateMachine:GetFoodItems"
+get_food_itemsZe = "arn:aws:states:us-east-1:067458896719:stateMachine:GetFoodItems"
 
 @api_view(['GET'])
 def getFoodItems(request):
     if request.method == 'GET':
         sf = boto3.client('stepfunctions', region_name='us-east-1')
-        res = sf.start_sync_execution(stateMachineArn=get_food_items)
+        res = sf.start_sync_execution(stateMachineArn=get_food_itemsZe)
         data = json.loads(res["output"])
         
         return JsonResponse(data, safe=False)
@@ -48,5 +49,4 @@ def uploadPhoto(request):
 def orderPrice(request):
     if request.method == 'POST':
         price = 0
-
         return JsonResponse(price, safe=False)

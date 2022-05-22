@@ -17,7 +17,7 @@ class MyPage extends React.Component {
         <div>
           <div className="Main">
             <h2>Welcome to our Robot restaurant</h2>
-            <h3>Chose your profile</h3>
+            <h5>Chose your profile</h5>
             <div class="row">
             <div class="d-flex justify-content-around">
               <button id="btnClient" class="btn btn-primary btn-lg center-block" onClick={this.Client} >Client</button>

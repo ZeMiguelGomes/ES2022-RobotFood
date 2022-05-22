@@ -7,3 +7,5 @@ if [[ $1 == "-rs" ]]
 then
     python manage.py runserver
 fi
+
+# zip -r sv.zip . -x '*.git*'

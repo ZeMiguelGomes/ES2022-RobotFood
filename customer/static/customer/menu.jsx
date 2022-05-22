@@ -1,7 +1,8 @@
-//import React from 'react';
-//import ReactDOM from 'react-dom';
-//import {Container, Row,Table, Button } from 'reactstrap';
-//import 'bootstrap/dist/css/bootstrap.css';
+const { useState } = React;
+const { Table, Form,FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } = Reactstrap;
+
+
+
 class MyPage extends React.Component {
   constructor(props) {
       super(props)
@@ -12,6 +13,7 @@ class MyPage extends React.Component {
           locationTag: "",
           price: "",
           alertMessage: "",
+          seePopup: false
       }
       this.textreference = React.createRef();
       this.setCategory = this.setCategory.bind(this);
@@ -20,6 +22,7 @@ class MyPage extends React.Component {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.setAlertMessage = this.setAlertMessage.bind(this);
+      this.setPopupVisible = this.setPopupVisible.bind(this)
       
   }
   updateState() {
@@ -44,6 +47,10 @@ class MyPage extends React.Component {
 
   setCategory(category) {
     this.setState({selectedCategory: category});
+  }
+
+  setPopupVisible(){
+    this.setState({seePopup: true});
   }
 
   addItem(item) {
@@ -93,15 +100,19 @@ class MyPage extends React.Component {
     fetch('/customer/orderprice/', requestOptions)
         .then(response => response.json()
         .then(data => {
-          this.setState({ price: data.price });
+          this.setState({ price: data });
           console.log(data)
         })
         ).catch(error => this.setAlertMessage(error.message));
+    this.setPopupVisible();
   }
 
   render() {
+    const seePopup = this.state.seePopup;
+    console.log(seePopup);
     return (
       <div>
+        <div className="menuCustomer">
         <h3>Menu</h3>
         <Reactstrap.ListGroup>
           <Reactstrap.ListGroupItem tag="button" onClick={() => this.setCategory("Appetizer")} action>Appetizers</Reactstrap.ListGroupItem>
@@ -116,21 +127,27 @@ class MyPage extends React.Component {
         <h3>Order</h3>
         {this.renderOrder()}
 
-        <form onSubmit={this.handleSubmit}>
-          <label>
+        <Form className="form" onSubmit={this.handleSubmit}>
+          <Label>
             Location tag:
-            <input type="number" min="0" name="locationTag" value={this.state.locationTag} onChange={(e) => {
-                this.handleInputChange(e);
-              }}/>
-          </label>
-          <input type="submit" value="Submit"/>
-        </form>
+            <Input  type="number" 
+                    min="0" 
+                    name="locationTag" 
+                    value={this.state.locationTag} 
+                    onChange={(e) => {this.handleInputChange(e);}}
+            />
+          </Label>
+          <Button as="input" type="submit" variant="primary" data-toggle="modal" data-target="#exampleModal"> Submit</Button>
+          {this.state.seePopup ? this.ModalExample() : null}
+        </Form>
+      </div>
       </div>
     );
   }
 
   renderCategory() {
-    return(<table>
+    return(
+    <Table dark>
       <thead>
         <tr>
           <th>Item</th>
@@ -153,19 +170,19 @@ class MyPage extends React.Component {
                 <td>{item.description.S}</td>
                 <td>{item.calories.N}</td>
                 <td>{item.price.N}</td>
-                <Reactstrap.Button onClick={() => this.addItem(item)}>Add</Reactstrap.Button>
+                <td><Reactstrap.Button className="btn btn-danger" onClick={() => this.addItem(item)}> Add</Reactstrap.Button></td>
               </tr> :
                 null)
               )
             )
           }
         </tbody>
-    </table>);
+    </Table>);
   }
 
   renderOrder() {
     return(
-    <table>
+    <Table>
       <tbody>
         {!this.state.order || this.state.order.length <= 0 ? (
           <tr>
@@ -177,16 +194,49 @@ class MyPage extends React.Component {
               <tr colSpan="6" align="center">
                 <td>{item.name}</td>
                 <td>{item.price}</td>
-                <Reactstrap.Button onClick={() => this.removeItem(item)}>Remove</Reactstrap.Button>
+                <td><Reactstrap.Button onClick={() => this.removeItem(item)}>Remove</Reactstrap.Button></td>
               </tr>
               )
             )
           )
         }
       </tbody>
-    </table>);
+    </Table>);
   }
+
+
+ModalExample() {
+ 
+  return (
+    <div>
+      {/* <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Launch demo modal
+      </button> */}
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Order Summary</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <Label> Total price: {this.state.price} €</Label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Submit Payment</button>
+          </div>
+        </div>
+      </div>
+      </div>  
+    </div>
+  );
 }
+}
+
+
 
 class Alert extends React.Component {
   constructor(props) {
