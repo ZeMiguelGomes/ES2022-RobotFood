@@ -31,7 +31,8 @@ ALLOWED_HOSTS = [
     'localhost',
     'projetoes-env.eba-cmhnb53q.us-east-1.elasticbeanstalk.com',
     'ebdjango-env-1.eba-j8433mxt.us-east-1.elasticbeanstalk.com',
-    'robotfood-env.eba-s6hmnkqn.us-east-1.elasticbeanstalk.com'
+    'robotfood-env.eba-s6hmnkqn.us-east-1.elasticbeanstalk.com',
+    'robotfoodes-env.eba-ir4nunpm.us-east-1.elasticbeanstalk.com'
 ]
 
 
@@ -87,9 +88,17 @@ WSGI_APPLICATION = 'ebdjango.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'other': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': "ebdb",
+        'USER': "postgres",
+        'PASSWORD': "postgres",
+        'HOST': "aa1hwd16d753m5q.ceyhg4pgsozs.us-east-1.rds.amazonaws.com",    # Ze
+        'PORT': "5432",
     }
 }
 

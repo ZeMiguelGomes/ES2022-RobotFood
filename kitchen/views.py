@@ -10,6 +10,25 @@ from rest_framework import status
 import jwt
 
 
+import psycopg2
+import sys
+import os
+
+from .models import Staff
+from .serializers import *
+
+@api_view(['GET'])
+def dbTest(request):
+    if request.method == 'GET':
+        data = Staff.objects.all()
+        resposta = {"OBJ" : data}
+
+        #serializer = StaffSerializer(data)
+        return JsonResponse(resposta, safe=False)
+
+   
+
+
 KEY = "b96ZhIxcBdxNPDn4WRzDueMMqyux3k7g"
 #Encrypt
 #pwd_context = CryptContext(

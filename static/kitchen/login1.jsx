@@ -20,6 +20,14 @@ class Login extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
+  componentDidMount(){
+    fetch('/kitchen/dbTest/')
+        .then(res => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+  }
+
   changeStateLogin(){
     this.setState({canLoggin: false});
   }

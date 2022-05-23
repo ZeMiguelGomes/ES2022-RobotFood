@@ -42,7 +42,6 @@ def uploadPhoto(request):
         s3.put_object(Body=data['file'], Bucket='face-to-detect', Key=data['file'].name)
         #object = s3.Object('face-to-detect', data['file'].name)
         #ret = object.put(Body=data['file'])
-
         return JsonResponse(True, safe=False)
 
 @api_view(['POST'])  
