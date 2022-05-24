@@ -13,7 +13,9 @@ class MyPage extends React.Component {
           locationTag: "",
           price: "",
           alertMessage: "",
-          seePopup: false
+          seePopup: false,
+          picturePreview: "",
+          pictureAsFile: ""
       }
       this.textreference = React.createRef();
       this.setCategory = this.setCategory.bind(this);
@@ -22,7 +24,9 @@ class MyPage extends React.Component {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.setAlertMessage = this.setAlertMessage.bind(this);
-      this.setPopupVisible = this.setPopupVisible.bind(this)
+      this.setPopupVisible = this.setPopupVisible.bind(this);
+      this.uploadPicture = this.uploadPicture.bind(this);
+      this.setImageAction = this.setImageAction.bind(this);
       
   }
   updateState() {
@@ -107,6 +111,32 @@ class MyPage extends React.Component {
     this.setPopupVisible();
   }
 
+  uploadPicture = (e) => {
+    this.setState({
+        picturePreview : URL.createObjectURL(e.target.files[0]),
+        pictureAsFile : e.target.files[0]
+    })
+};
+
+  setImageAction = () => {
+    const formData = new FormData();
+    formData.append(
+        "file",
+        this.state.pictureAsFile,
+        this.state.pictureAsFile.name
+    );
+    const requestOptions = {
+      method: 'POST',
+      body: formData
+  };
+  fetch('/customer/uploadphoto/', requestOptions)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ postId: data.id });
+        console.log(data)
+      });
+  };
+
   render() {
     const seePopup = this.state.seePopup;
     console.log(seePopup);
@@ -141,6 +171,15 @@ class MyPage extends React.Component {
           {this.state.seePopup ? this.ModalExample() : null}
         </Form>
       </div>
+      <form onSubmit={this.setImageAction}>
+              <input type="file" name="image" onChange={this.uploadPicture}/>
+              <br />
+              <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
+              <br />
+              <button type="submit" name="upload">
+                Upload
+              </button>
+            </form>
       </div>
     );
   }
@@ -223,6 +262,17 @@ ModalExample() {
           </div>
           <div class="modal-body">
             <Label> Total price: {this.state.price} €</Label>
+            
+            <form onSubmit={this.setImageAction}>
+              <input type="file" name="image" onChange={this.uploadPicture}/>
+              <br />
+              <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
+              <br />
+              <button type="submit" name="upload">
+                Upload
+              </button>
+            </form>
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -232,10 +282,11 @@ ModalExample() {
       </div>
       </div>  
     </div>
+
+    
   );
 }
 }
-
 
 
 class Alert extends React.Component {

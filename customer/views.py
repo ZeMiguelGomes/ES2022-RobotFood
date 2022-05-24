@@ -39,7 +39,7 @@ def uploadPhoto(request):
 
     if request.method == 'POST':
         data = request.data.dict()
-        
+        print(data)
         #s3 = boto3.client('s3', region_name='us-east-1')
         s3 = boto3.client('s3', region_name='us-east-1', aws_access_key_id="ASIA5UAJKHAHMCM3DHHO", aws_secret_access_key="HJwINA/SrPTHTnFauAeeEwChPfnJRnLkXHt6J1uT", aws_session_token="FwoGZXIvYXdzEJf//////////wEaDEdymnZm/Yz9l2MXfiLLAegXb7svd0Z9NeTFT1ra6NPI0JlFmjOFGksAie4bTRjsHVdMOMw2bog3kzplOKvKZ/z3h57T6561wDGcibx/GSIDuc4qHbmfG+0BEzoJdw376tXjVHa4gxQPmHvAAobAr3a3QJEbu4+vs08x9AIPjZdk6eOGvirc317k/tCQu+csKtD/l20kjAXrco+m9bRua0MnC1aCLX3Z2n8xJITleGOrWCJxzJUFNSVmFKkAmc8lWeJmdGGxe9TMeevp4+aTNn6kRgkcj6lHxStlKIbPsZQGMi0sFPGSK4MAJsYoTySXZ9AOC4OwE/yPZNctRBKGsiXmBgGPsKIvoYJXXT83DMw=")
         s3.put_object(Body=data['file'], Bucket='face-to-detect', Key=data['file'].name)
