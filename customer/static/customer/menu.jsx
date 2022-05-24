@@ -94,7 +94,7 @@ class MyPage extends React.Component {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            order: this.state.order,
+            order: this.state.order
         })
     };
     fetch('/customer/orderprice/', requestOptions)
