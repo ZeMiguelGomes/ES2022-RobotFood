@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class Staff(models.Model):
     staff_email = models.EmailField(primary_key=True)
-    staff_name = models.CharField("name", max_length=240)
+    staff_name = models.CharField("staff_name", max_length=240)
     password = models.CharField("password", max_length=240)
     authToken = models.TextField(blank=True, null=True)
     isLoggedIn = models.CharField(default='False', max_length=240)

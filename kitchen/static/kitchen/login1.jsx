@@ -79,24 +79,20 @@ class Login extends React.Component {
   }).then(function(response){
     return response.json()
     .then(function(json){
-
-      if(json != null){
-        if(json['Attributes']['authToken'] != null){
+      console.log(json)
+      var checkError = json.hasOwnProperty('Error')
+      if(!checkError){
           //Go to new screen
           canLoggin = 'True'
           var staffProps = {
-            'email': json['Attributes']['staff_email'], 
-            'name' : json['Attributes']['name'],
-            'authToken' : json['Attributes']['authToken']
+            'email': json['email'], 
+            'name' : json['name'],
+            'authToken' : json['authToken']
           }
           sessionStorage.setItem('email', JSON.stringify(staffProps));
           console.log(JSON.stringify(staffProps));
           window.location.replace('/kitchen/login/');
 
-        }else{
-          that.changeStateLogin();
-          canLoggin = 'False'
-        }
       }else{
         that.changeStateLogin();
         canLoggin = 'False'
@@ -144,7 +140,7 @@ class Login extends React.Component {
             />
           </Reactstrap.FormGroup>
           <Reactstrap.Button >Submit</Reactstrap.Button>
-          {this.state.canLoggin == false ?<Reactstrap.FormText> Oops something wrong happened!</Reactstrap.FormText>:null}
+          {this.state.canLoggin == false ?<Reactstrap.FormText> Oops wrong password!</Reactstrap.FormText>:null}
 
         </Reactstrap.Form>
       </div>
