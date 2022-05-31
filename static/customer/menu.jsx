@@ -127,14 +127,17 @@ class MyPage extends React.Component {
     );
     const requestOptions = {
       method: 'POST',
-      body: formData
+      body: formData,
+      headers: {"Access-Control-Allow-Origin": "*"}
   };
+  console.log("vou fazer POST");
   fetch('/customer/uploadphoto/', requestOptions)
       .then(res => res.json())
       .then(data => {
         this.setState({ postId: data.id });
         console.log(data)
       });
+      console.log("fiz POST");
   };
 
   render() {
@@ -170,16 +173,7 @@ class MyPage extends React.Component {
           <Button as="input" type="submit" variant="primary" data-toggle="modal" data-target="#exampleModal"> Submit</Button>
           {this.state.seePopup ? this.ModalExample() : null}
         </Form>
-      </div>
-      <form onSubmit={this.setImageAction}>
-              <input type="file" name="image" onChange={this.uploadPicture}/>
-              <br />
-              <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
-              <br />
-              <button type="submit" name="upload">
-                Upload
-              </button>
-            </form>
+      </div>            
       </div>
     );
   }
@@ -262,21 +256,16 @@ ModalExample() {
           </div>
           <div class="modal-body">
             <Label> Total price: {this.state.price} €</Label>
-            
-            <form onSubmit={this.setImageAction}>
-              <input type="file" name="image" onChange={this.uploadPicture}/>
-              <br />
-              <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
-              <br />
-              <button type="submit" name="upload">
-                Upload
-              </button>
-            </form>
+            <br />
+            <input type="file" name="image" onChange={this.uploadPicture}/>
+            <br />
+            <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
+            <br />
 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Submit Payment</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick={this.setImageAction}>Submit Payment</button>
           </div>
         </div>
       </div>

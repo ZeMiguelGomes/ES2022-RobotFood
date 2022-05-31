@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'projetoes-env.eba-cmhnb53q.us-east-1.elasticbeanstalk.com',
     'ebdjango-env-1.eba-j8433mxt.us-east-1.elasticbeanstalk.com',
-    'robotfood-env.eba-s6hmnkqn.us-east-1.elasticbeanstalk.com'
+    'robotfood-env.eba-s6hmnkqn.us-east-1.elasticbeanstalk.com',
 ]
 
 
@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
 }
 
 
@@ -142,3 +142,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
+SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
