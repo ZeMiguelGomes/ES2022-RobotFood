@@ -6,14 +6,19 @@ from rest_framework.response import Response
 from django.shortcuts import render
 from django.http import JsonResponse
 
-aws_access_key_id="ASIA5UAJKHAHF357WS6S"
-aws_secret_access_key="9r1J/u9NasvauRJx6IYR1R8/eHX0QLudRTUZGtrR"
-aws_session_token="FwoGZXIvYXdzEF8aDEtaBHkWpBpiBMSwfCLLAeWA+wUcaqPyFjAmCGb26yuoQiPvokG8dlcvDx3FM1NFeyLKlMt+K9c88DCFG1sdFmjYCynxE45PSISqfGI1GE0C+wvRG6n98YMCqTBRVvJAslCKMssqRGifY5HaSVfGBt63L7NnfPqnnnugEe4DG4Mq82DVtdtK+ZWHvXzsvD+XIQS2AYHW6m5lDoei99f/O1Ptx/IzwM3Mnldhlsx2MZ5LXqtHw92qd1mjdNkiOe4l3i0W1lvf/1bUG96zbj0urgSqdHqTbDepvLG6KOXP3ZQGMi1/rtncF+1bZW/H3zDreF6gmxRWz25gzXAfWv2om2Wl0wK8/zg70jVSBQHRzLY="
+aws_access_key_id="ASIAQ7NG5CNH54SBJAHA"
+aws_secret_access_key="7jHL34r+xMjj7wAukw3OZmHbd7Po8aqqOpeMsPW8"
+aws_session_token="FwoGZXIvYXdzEGAaDPv6eMd2KlqJPL8QEiLLAavr2KFHmpgJJfRP84MsD69KMDrCrYtg83LrotuuPtVgYe7ZbrSrVmG6v+7pB7KDNuCIA9NWJ9qj2U4jRj61cTaPOtVkQVpm9RxksAq9q6wSo6QvgyRbCS5Vc+AaAAexT/lgk/AXhULjugZK/cJNFh/YMLfP6A5rY+yt2YKFILgkMOY4uLSdQb9Abo1uHfscm00/gjNlUlDcpucpoqAqvME+h9inRgABD1NXeZMsZaBC5vKybFrLoR4aMaG5pjjKIPSY/0o0kWDFJVeVKMT+3ZQGMi3ObZ8SniCmn0nXToJQ6Cbyd7U5UCEMmeLlk+uo1kOS52SeeFGCvkeeQou/Mak="
 
 get_food_items = "arn:aws:states:us-east-1:936322414606:stateMachine:GetFoodItems"
 calc_price = "arn:aws:states:us-east-1:936322414606:stateMachine:CalcPrice"
+
 get_food_itemsZe = "arn:aws:states:us-east-1:067458896719:stateMachine:GetFoodItems"
 calc_priceZe = "arn:aws:states:us-east-1:067458896719:stateMachine:calc_price"
+submit_orderZe = "arn:aws:states:us-east-1:067458896719:stateMachine:submit_order"
+facial_rekognitionZe = "arn:aws:states:us-east-1:067458896719:stateMachine:FacialRekognition"
+
+
 submit_order = "arn:aws:states:us-east-1:936322414606:stateMachine:SubmitOrder"
 facial_rekognition = "arn:aws:states:us-east-1:936322414606:stateMachine:FacialRekognition"
 
@@ -23,7 +28,7 @@ def getFoodItems(request):
         #sf = boto3.client('stepfunctions', region_name='us-east-1')
         sf = boto3.client('stepfunctions', region_name='us-east-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key , aws_session_token=aws_session_token)
         
-        res = sf.start_sync_execution(stateMachineArn=get_food_items)
+        res = sf.start_sync_execution(stateMachineArn=get_food_itemsZe)
         data = json.loads(res["output"])
         
         return JsonResponse(data, safe=False)
@@ -51,9 +56,9 @@ def uploadPhoto(request):
         s3 = boto3.client('s3', region_name='us-east-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key , aws_session_token=aws_session_token)
         sf = boto3.client('stepfunctions', region_name='us-east-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key , aws_session_token=aws_session_token)
 
-        s3.put_object(Body=data['file'], Bucket='face-to-detect', Key=data['file'].name)
-        res = sf.start_sync_execution(stateMachineArn=facial_rekognition, input=json.dumps({"photoName": data['file'].name}))
-        print(res["output"])
+        s3.put_object(Body=data['file'], Bucket='facetodetect-es', Key=data['file'].name)
+        res = sf.start_sync_execution(stateMachineArn=facial_rekognitionZe, input=json.dumps({"photoName": data['file'].name}))
+        print(res)
         return JsonResponse(res["output"], safe=False)
 
 @api_view(['GET', 'POST'])
@@ -75,7 +80,7 @@ def submitOrder(request):
         request.data["price"] = str(request.data["price"])
         print(type(request.data['price']))
         print(request.data)
-        res = sf.start_execution(stateMachineArn=submit_order, input=json.dumps(request.data))
+        res = sf.start_execution(stateMachineArn=submit_orderZe, input=json.dumps(request.data))
         
         return JsonResponse("Order submitted!", safe=False)
 
@@ -85,7 +90,7 @@ def orderPrice(request):
         #sf = boto3.client('stepfunctions', region_name='us-east-1')
         sf = boto3.client('stepfunctions', region_name='us-east-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key , aws_session_token=aws_session_token)
         
-        res = sf.start_sync_execution(stateMachineArn=calc_price, input=json.dumps(request.data['order']))
+        res = sf.start_sync_execution(stateMachineArn=calc_priceZe, input=json.dumps(request.data['order']))
         data = json.loads(res["output"])
         print(data)
 

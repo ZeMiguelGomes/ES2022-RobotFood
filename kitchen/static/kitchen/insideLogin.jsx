@@ -78,7 +78,7 @@ class App extends React.Component {
                               <td>{item.locationTag.N}</td>
                               <td>{item.items.L.map(item =>( item.S + '\n'
                               ))}</td>
-                              <td>{item.status.S}</td>
+                              <td>{item.progress.S}</td>
                             </tr>)
                           )
                         )}

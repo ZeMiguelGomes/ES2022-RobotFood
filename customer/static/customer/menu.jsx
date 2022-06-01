@@ -149,7 +149,7 @@ class MyPage extends React.Component {
         console.log(check)
         if(check["found"]) {
           fetch('/customer/submitorder/', {
-            // Adding method type
+            // Adding method types
             method: "POST",
             // Adding body or contents to send
             body: JSON.stringify({
