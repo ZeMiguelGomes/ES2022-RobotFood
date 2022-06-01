@@ -125,6 +125,7 @@ class MyPage extends React.Component {
         this.state.pictureAsFile,
         this.state.pictureAsFile.name
     );
+    console.log(this.state.pictureAsFile.name)
     const requestOptions = {
       method: 'POST',
       body: formData,
@@ -137,6 +138,22 @@ class MyPage extends React.Component {
         this.setState({ postId: data.id });
         console.log(data)
       });
+
+  fetch('/customer/submitorder/', {
+        // Adding method type
+        method: "POST",
+        // Adding body or contents to send
+        body: JSON.stringify({
+            items: this.state.order,
+            price: this.state.price,
+            photoName: this.state.pictureAsFile.name,
+            locationTag: this.state.locationTag
+        }),
+        // Adding headers to the request
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    }).then(res => res.json());
       console.log("fiz POST");
   };
 

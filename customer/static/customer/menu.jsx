@@ -25,10 +25,9 @@ class MyPage extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.setAlertMessage = this.setAlertMessage.bind(this);
       this.setPopupVisible = this.setPopupVisible.bind(this);
-      this.uploadPicture = this.uploadPicture.bind(this);
-      this.setImageAction = this.setImageAction.bind(this);
-      
+      this.submitOrder = this.submitOrder.bind(this);
   }
+
   updateState() {
     fetch('/customer/menu/')
         .then(res => res.json())
@@ -118,23 +117,63 @@ class MyPage extends React.Component {
     })
 };
 
-  setImageAction = () => {
+  validateInputs = () => {
+    if(this.state.order.length > 0 && this.state.locationTag != "" && this.state.pictureAsFile != "") {
+      this.submitOrder();
+    }
+    else {
+      alert("Please fill in all fields.")
+    }
+  }
+
+  submitOrder() {
     const formData = new FormData();
     formData.append(
         "file",
         this.state.pictureAsFile,
         this.state.pictureAsFile.name
     );
+    console.log(this.state.pictureAsFile.name)
     const requestOptions = {
       method: 'POST',
-      body: formData
+      body: formData,
+      headers: {"Access-Control-Allow-Origin": "*"}
   };
+
   fetch('/customer/uploadphoto/', requestOptions)
       .then(res => res.json())
       .then(data => {
-        this.setState({ postId: data.id });
-        console.log(data)
+        this.setState({ photoCheck: data });
+        
+        let check = JSON.parse(this.state.photoCheck)
+        console.log(check)
+        if(check["found"]) {
+          fetch('/customer/submitorder/', {
+            // Adding method type
+            method: "POST",
+            // Adding body or contents to send
+            body: JSON.stringify({
+                items: this.state.order,
+                price: this.state.price,
+                name: check["name"],
+                locationTag: this.state.locationTag
+            }),
+            // Adding headers to the request
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(res => res.json());
+          alert("Order submitted!")
+
+      }
+      else {
+        alert("Face not recognized, please contact customer support.");
+      }
+
+      window.location.replace('/');
       });
+
+      
   };
 
   render() {
@@ -170,16 +209,7 @@ class MyPage extends React.Component {
           <Button as="input" type="submit" variant="primary" data-toggle="modal" data-target="#exampleModal"> Submit</Button>
           {this.state.seePopup ? this.ModalExample() : null}
         </Form>
-      </div>
-      <form onSubmit={this.setImageAction}>
-              <input type="file" name="image" onChange={this.uploadPicture}/>
-              <br />
-              <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
-              <br />
-              <button type="submit" name="upload">
-                Upload
-              </button>
-            </form>
+      </div>            
       </div>
     );
   }
@@ -262,21 +292,16 @@ ModalExample() {
           </div>
           <div class="modal-body">
             <Label> Total price: {this.state.price} €</Label>
-            
-            <form onSubmit={this.setImageAction}>
-              <input type="file" name="image" onChange={this.uploadPicture}/>
-              <br />
-              <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
-              <br />
-              <button type="submit" name="upload">
-                Upload
-              </button>
-            </form>
+            <br />
+            <input type="file" name="image" onChange={this.uploadPicture}/>
+            <br />
+            <img src={this.state.picturePreview} alt="Preview" width="120" height="100"></img>
+            <br />
 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Submit Payment</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick={this.validateInputs}>Submit Payment</button>
           </div>
         </div>
       </div>
