@@ -162,8 +162,12 @@ class MyPage extends React.Component {
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
-        }).then(res => res.json());
-          alert("Order submitted!")
+        }).then(function(res) {
+          res.json();
+          console.log(res);
+        });
+        //sessionStorage.setItem('uuid', JSON.stringify(staffProps));
+        alert("Order submitted!")
 
       }
       else {

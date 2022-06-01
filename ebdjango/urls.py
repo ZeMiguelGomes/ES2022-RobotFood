@@ -23,6 +23,7 @@ from rest_framework_simplejwt.views import (
 from customer import views
 urlpatterns = [
     path('', views.mainMenu),
+    path('retrieveorder/', views.retrieveOrder, name='retrieveOrder'),
     path('admin/', admin.site.urls),
     path('kitchen/', include('kitchen.urls')),
     path('customer/', include('customer.urls')),

@@ -94,13 +94,13 @@ def loginStaff(request):
 
 
 
-
+get_orders = "arn:aws:states:us-east-1:936322414606:stateMachine:GetOrders"
 get_ordersZe = 'arn:aws:states:us-east-1:067458896719:stateMachine:GetOrders'
 @api_view(['GET'])
 def getOrders(request):
     if request.method == 'GET':
         sf = boto3.client('stepfunctions', region_name='us-east-1')
-        res = sf.start_sync_execution(stateMachineArn=get_ordersZe)
+        res = sf.start_sync_execution(stateMachineArn=get_orders)
         data = json.loads(res["output"])
         return JsonResponse(data, safe=False)
 

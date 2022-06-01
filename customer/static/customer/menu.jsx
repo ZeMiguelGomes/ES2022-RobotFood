@@ -143,10 +143,11 @@ class MyPage extends React.Component {
   fetch('/customer/uploadphoto/', requestOptions)
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         this.setState({ photoCheck: data });
         
         let check = JSON.parse(this.state.photoCheck)
-        console.log(check)
+        
         if(check["found"]) {
           fetch('/customer/submitorder/', {
             // Adding method types
@@ -162,15 +163,21 @@ class MyPage extends React.Component {
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
-        }).then(res => res.json());
-          alert("Order submitted!")
+        }).then(res => res.json())
+        .then(data => {
+          let d = JSON.parse(data)
+          console.log(d["id"]["uuid"]);
+          sessionStorage.setItem('uuid', d["id"]["uuid"]);
+          window.location.replace('/');
+        });
+        
+        alert("Order submitted!")
 
       }
       else {
         alert("Face not recognized, please contact customer support.");
+        window.location.replace('/');
       }
-
-      window.location.replace('/');
       });
 
       
