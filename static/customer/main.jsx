@@ -38,16 +38,16 @@ class MyPage extends React.Component {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            locationTag: this.state.locationTag
+            locationTag: this.state.locationTag,
+            uuid: sessionStorage.getItem("uuid")
         })
     };
     fetch('/retrieveorder/', requestOptions)
-        .then(response => response.json()
+        .then(response => response.json())
         .then(data => {
-          this.setState({ price: data });
           console.log(data)
-        })
-        );
+          alert(data)
+        });
   }
 
   render() {

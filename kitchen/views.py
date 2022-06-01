@@ -159,7 +159,7 @@ get_ordersZe = 'arn:aws:states:us-east-1:067458896719:stateMachine:GetOrders'
 def getOrders(request):
     if request.method == 'GET':
         sf = boto3.client('stepfunctions', region_name='us-east-1')
-        res = sf.start_sync_execution(stateMachineArn=get_orders)
+        res = sf.start_sync_execution(stateMachineArn=get_ordersZe)
         data = json.loads(res["output"])
         return JsonResponse(data, safe=False)
 
