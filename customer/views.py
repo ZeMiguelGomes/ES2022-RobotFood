@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from django.shortcuts import render
 from django.http import JsonResponse
 
-aws_access_key_id="ASIAQ7NG5CNH54SBJAHA"
-aws_secret_access_key="7jHL34r+xMjj7wAukw3OZmHbd7Po8aqqOpeMsPW8"
-aws_session_token="FwoGZXIvYXdzEGAaDPv6eMd2KlqJPL8QEiLLAavr2KFHmpgJJfRP84MsD69KMDrCrYtg83LrotuuPtVgYe7ZbrSrVmG6v+7pB7KDNuCIA9NWJ9qj2U4jRj61cTaPOtVkQVpm9RxksAq9q6wSo6QvgyRbCS5Vc+AaAAexT/lgk/AXhULjugZK/cJNFh/YMLfP6A5rY+yt2YKFILgkMOY4uLSdQb9Abo1uHfscm00/gjNlUlDcpucpoqAqvME+h9inRgABD1NXeZMsZaBC5vKybFrLoR4aMaG5pjjKIPSY/0o0kWDFJVeVKMT+3ZQGMi3ObZ8SniCmn0nXToJQ6Cbyd7U5UCEMmeLlk+uo1kOS52SeeFGCvkeeQou/Mak="
+aws_access_key_id="ASIAQ7NG5CNH7G46PWNL"
+aws_secret_access_key="gDbjUte8Jxih4oM5JVBoIfZqtNk5RIkN0sEe65OJ"
+aws_session_token="FwoGZXIvYXdzEGUaDFArkJuC8aF7SbCVSSLLAT82EjYFrmZKHpyGvGP9/55UX1DxRECKGjqaaXDvgj+Sc8lGrpSuXwpOEeKfw9x8//Q/TbHyhxb9KQhIyKkJ2t4SA8OCkFNsKhOHKhyGx89mf6dBmL2iKcfrOelXCpQzHr+br6XPET5cWB6ZZ1lhg9YY6kwKBWlLomakVooExbyg0BVoDw/bd9v+pInHbrNvAiko8Mi/oyMGrdACPN6DxghXNm35mVF3DSjZmlTkfoj3AWNrL7EJHyVH3yqQVqbbjQ7Nk+0gI85blqj+KKTx3pQGMi0Tv3B6dIoe5OARBdeuqqYLgj48wZsLlSbnmX5ot3ZYMEnJm3qowm8/LMgUQKs="
+
 
 get_food_items = "arn:aws:states:us-east-1:936322414606:stateMachine:GetFoodItems"
 calc_price = "arn:aws:states:us-east-1:936322414606:stateMachine:CalcPrice"
@@ -17,7 +18,6 @@ get_food_itemsZe = "arn:aws:states:us-east-1:067458896719:stateMachine:GetFoodIt
 calc_priceZe = "arn:aws:states:us-east-1:067458896719:stateMachine:calc_price"
 submit_orderZe = "arn:aws:states:us-east-1:067458896719:stateMachine:submit_order"
 facial_rekognitionZe = "arn:aws:states:us-east-1:067458896719:stateMachine:FacialRekognition"
-
 
 submit_order = "arn:aws:states:us-east-1:936322414606:stateMachine:SubmitOrder"
 facial_rekognition = "arn:aws:states:us-east-1:936322414606:stateMachine:FacialRekognition"
